@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dentist Booking System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen text-gray-800">
+    
+    <!-- Optional: Navbar/Header -->
+    <header class="bg-blue-700 text-white py-4 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">🦷 Dentist Booking System</h1>
+            <!-- You can add nav links here -->
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    <div class="max-w-3xl mx-auto px-4 mt-6">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-xl border-l-4 shadow-md 
+                            {% if message.tags == 'success' %}
+                                bg-green-100 border-green-500 text-green-800
+                            {% elif message.tags == 'error' %}
+                                bg-red-100 border-red-500 text-red-800
+                            {% else %}
+                                bg-blue-100 border-blue-500 text-blue-800
+                            {% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Page Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

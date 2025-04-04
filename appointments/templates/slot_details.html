@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto mt-12 bg-white p-8 shadow-xl rounded-2xl space-y-8 animate-fade-in">
+
+    <h1 class="text-3xl font-bold text-center text-blue-700">🗓️ Slot Details</h1>
+
+    <div class="text-gray-700 space-y-2">
+        <p><strong>Dentist:</strong> {{ dentist.name }}</p>
+        <p><strong>Start Time:</strong> {{ start_time }}</p>
+        <p><strong>End Time:</strong> {{ end_time }}</p>
+        <p><strong>Note:</strong> {{ maximum_people }} have already booked this slot.</p>
+    </div>
+
+    <!-- ✅ Success/Error Message Display -->
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div data-dismissible class="p-4 rounded-xl text-white 
+                    {% if message.tags == 'success' %}bg-green-600
+                    {% elif message.tags == 'error' %}bg-red-600
+                    {% else %}bg-blue-600{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Step 1: Email Input -->
+    <div class="bg-blue-50 p-5 rounded-xl shadow-sm">
+        <h2 class="text-xl font-semibold text-blue-600 mb-2">Step 1: Enter Your Email</h2>
+        <form action="{% url 'send_otp' %}" method="POST" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="email" class="block text-sm font-medium">Email:</label>
+                <input type="email" id="email" name="email" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-400">
+            </div>
+            <input type="hidden" name="slot_id" value="{{ slot.id }}">
+            <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl transition">Send OTP</button>
+        </form>
+    </div>
+</div>
+
+<!-- ✅ Auto-dismiss message -->
+<script>
+    setTimeout(() => {
+        const alert = document.querySelector('[data-dismissible]');
+        if (alert) alert.style.display = 'none';
+    }, 3000);
+</script>
+
+{% endblock %}
