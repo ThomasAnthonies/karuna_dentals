@@ -15,6 +15,8 @@ from .utils import generate_otp,  send_email_notification
 
 logger = logging.getLogger(__name__)
 
+
+
 def get_slot_details(request, slot_id):
     slot = get_object_or_404(available_timmings, id=slot_id)
     request.session['slot_id'] = slot_id  # Store the slot ID in the session for later use
@@ -131,6 +133,12 @@ from datetime import datetime
 
 from .models import Patient, Appointment, Dentist, available_timmings
 from .utils import send_email_notification  # Assuming you have this defined
+
+
+
+def home(request):
+    return render(request, 'home.html')
+
 
 def book_slot(request, slot_id):
     """
