@@ -18,6 +18,8 @@ urlpatterns = [
     path('staff/login/', views.staff_login_view, name='staff_login'),
     path('staff/dashboard/', views.staff_dashboard_view, name='staff_dashboard'),
     path('staff/view-appointments/', views.view_appointments, name='view_appointments'),
+    path('staff/logout/', views.staff_logout_view, name='staff_logout'),
+
     
 ]
 

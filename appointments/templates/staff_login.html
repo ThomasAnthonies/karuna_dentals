@@ -37,6 +37,7 @@
             padding: 12px;
             font-weight: bold;
             transition: background-color 0.3s ease-in-out;
+            border-radius: 8px;
         }
 
         .btn-login:hover {
@@ -58,7 +59,7 @@
 
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-{{ message.tags }} shadow-sm" role="alert">
                     {{ message }}
                 </div>
             {% endfor %}
@@ -84,6 +85,5 @@
         </form>
     </div>
 </div>
-
 </body>
 </html>

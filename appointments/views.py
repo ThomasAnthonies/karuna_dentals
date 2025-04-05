@@ -296,6 +296,7 @@ def add_dentist(request):
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.views.decorators.cache import never_cache
 from .forms import StaffLoginForm
 
 def staff_login_view(request):
@@ -318,7 +319,7 @@ def staff_login_view(request):
 
     return render(request, 'staff_login.html', {'form': form})
 
-
+@never_cache
 def staff_dashboard_view(request):
     if not request.session.get('staff_logged_in'):
         return redirect('staff_login')
@@ -333,5 +334,6 @@ def staff_dashboard_view(request):
 
 def staff_logout_view(request):
     request.session.flush()
+    messages.success(request, "Logged out successfully!")
     return redirect('staff_login')
 

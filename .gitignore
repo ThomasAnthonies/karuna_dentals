@@ -1,0 +1,50 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+
+# Environment files
+.env
+*.env
+env/
+venv/
+ENV/
+
+# Django-specific files
+staticfiles/
+media/
+db.sqlite3  # Just in case you're testing with SQLite
+*.log
+
+# PostgreSQL local dumps or credentials
+*.psql
+*.dump
+*.pgsql
+pgdata/
+pgadmin_data/
+
+# Django migrations (optional, if you want a fresh start)
+**/migrations/*.pyc
+**/migrations/__pycache__/
+**/migrations/*.py
+!**/migrations/__init__.py  # Keep init file
+
+# IDEs and Editors
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Frontend build output (if using a bundler later)
+dist/
+build/
+node_modules/
+
+# Coverage reports (if using pytest or coverage tools)
+htmlcov/
+.coverage
+.cache/
+.tox/
