@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS =  ['localhost', '127.0.0.1', 'dentalclinic-karuna.onrender.com']
+ALLOWED_HOSTS = ['karuna-dentals.onrender.com', 'localhost', '127.0.0.1']
 
 
 
