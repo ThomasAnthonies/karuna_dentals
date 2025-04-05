@@ -230,6 +230,12 @@ def book_appointment_page(request, slot_id):
 
 
 def view_appointments(request):
+    if not request.session.get('staff_logged_in'):
+     return redirect('staff_login')
+
+    username = request.session.get('staff_username')
+    if not username or username not in settings.STAFF_CREDENTIALS:
+        return redirect('staff_login')
     """Display all scheduled appointments."""
     appointments = Appointment.objects.filter(status="scheduled").order_by("date", "from_time")
     return render(request, "view_appointments.html", {"appointments": appointments})
@@ -263,6 +269,12 @@ def cancel_appointment(request, appointment_id):
 
 def add_dentist(request):
     """Add a new dentist to the system."""
+    if not request.session.get('staff_logged_in'):
+     return redirect('staff_login')
+
+    username = request.session.get('staff_username')
+    if not username or username not in settings.STAFF_CREDENTIALS:
+        return redirect('staff_login')
     if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
@@ -280,3 +292,46 @@ def add_dentist(request):
         return redirect("add_dentist")  # Changed to stay on the same page
 
     return render(request, "add_dentist.html")
+
+from django.conf import settings
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import StaffLoginForm
+
+def staff_login_view(request):
+    if request.method == 'POST':
+        form = StaffLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            credentials = settings.STAFF_CREDENTIALS
+            if username in credentials and credentials[username] == password:
+                request.session['staff_logged_in'] = True
+                request.session['staff_username'] = username  # Store for future verification
+                request.session['staff_password'] = password  # Store for future verification
+                return redirect('staff_dashboard')
+            else:
+                messages.error(request, 'Invalid credentials')
+    else:
+        form = StaffLoginForm()
+
+    return render(request, 'staff_login.html', {'form': form})
+
+
+def staff_dashboard_view(request):
+    if not request.session.get('staff_logged_in'):
+        return redirect('staff_login')
+
+    username = request.session.get('staff_username')
+    # Optional check again for safety
+    if username not in settings.STAFF_CREDENTIALS:
+        return redirect('staff_login')
+
+    return render(request, 'staff_dashboard.html', {'username': username})
+
+
+def staff_logout_view(request):
+    request.session.flush()
+    return redirect('staff_login')
+

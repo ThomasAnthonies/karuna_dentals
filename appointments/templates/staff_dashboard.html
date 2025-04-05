@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md text-center animate-fade-in space-y-6">
+
+        <h2 class="text-3xl font-bold text-blue-700">👨‍⚕️ Welcome, Staff</h2>
+        
+        <div class="space-y-4">
+            <a href="{% url 'view_appointments' %}" 
+               class="block w-full px-4 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition">
+                📅 View Appointments
+            </a>
+
+            <a href="{% url 'add_dentist' %}" 
+               class="block w-full px-4 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition">
+                ➕ Add Dentist
+            </a>
+        </div>
+    </div>
+</body>
+</html>

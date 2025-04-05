@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-q@4h!9)tp5irh&ik#faix8b4e)=%wa24ifjt--e#9ahiv@^-n$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -117,6 +118,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+STAFF_CREDENTIALS = {
+    'thomas': '12345678',
+    'receptionist': 'r12345678',
+}
+
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # session will expire when the user closes the browser
+SESSION_SAVE_EVERY_REQUEST = True  # refresh timeout each time when a request is made
+SESSION_COOKIE_AGE = 60 * 60  # 1 hour in seconds
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -133,7 +143,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

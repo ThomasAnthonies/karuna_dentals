@@ -14,5 +14,10 @@ urlpatterns = [
     path('appointments/', views.view_appointments, name='view_appointments'),
     path('cancel/<int:appointment_id>/', views.cancel_appointment, name='cancel_appointment'),
     path('add-dentist/', views.add_dentist, name='add_dentist'),
+    
+    path('staff/login/', views.staff_login_view, name='staff_login'),
+    path('staff/dashboard/', views.staff_dashboard_view, name='staff_dashboard'),
+    path('staff/view-appointments/', views.view_appointments, name='view_appointments'),
+    
 ]
 
