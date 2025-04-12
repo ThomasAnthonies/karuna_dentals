@@ -23,6 +23,8 @@ urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
     path('appointments/', include('appointments.urls')),
-     path('', include('appointments.urls')),  
+    path('', include('appointments.urls')),  
+    path('dentist/', include('dentist_side.urls')),
+    path('', include('dentist_side.urls')),
 ]
 

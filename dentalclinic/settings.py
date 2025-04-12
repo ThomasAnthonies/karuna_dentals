@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'appointments.apps.AppointmentsConfig',
+    'availablity.apps.AvailablityConfig',
+    'dentist_side.apps.DentistSideConfig'
     
     
     
@@ -132,6 +134,8 @@ STAFF_CREDENTIALS = {
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # session will expire when the user closes the browser
 SESSION_SAVE_EVERY_REQUEST = True  # refresh timeout each time when a request is made
 SESSION_COOKIE_AGE = 60 * 60  # 1 hour in seconds
+SESSION_COOKIE_SECURE = True  # Only over HTTPS
+SESSION_COOKIE_HTTPONLY = True  # JS can't read it
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

@@ -1,0 +1,95 @@
+<!-- templates/get_patient_by_email_or_phone.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Walk-in Patient Lookup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 2em;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 500px;
+            margin: auto;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-top: 1.5em;
+        }
+
+        label {
+            display: block;
+            margin-top: 1em;
+            font-weight: bold;
+        }
+
+        input[type="email"],
+        input[type="text"] {
+            width: 100%;
+            padding: 0.8em;
+            margin-top: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 2em;
+            width: 100%;
+            padding: 0.8em;
+            background-color: #3498db;
+            border: none;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .message {
+            margin-top: 1em;
+            padding: 1em;
+            background-color: #fce4e4;
+            border: 1px solid #f5c6cb;
+            color: #a94442;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Search Walk-in Patient</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST"  action= "{% url 'walkins' %}"  >
+            {% csrf_token %}
+            <label for="email">Patient Email:</label>
+            <input type="email" name="email" id="email" placeholder="Enter patient email" required>
+
+            <label for="phone">Patient Phone Number:</label>
+            <input type="text" name="phone" id="phone" placeholder="Enter patient phone number" required>
+
+            <button type="submit">Search Patient</button>
+        </form>
+    </div>
+</body>
+</html>

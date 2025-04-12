@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Visit Summary{% endblock %}
+
+{% block content %}
+<h2>Follow-up Summary</h2>
+<div class="card p-3 mb-3">
+    <h5>Patient: {{ patient.name }}</h5>
+    <p><strong>Diagnosis:</strong> {{ follow_up.diagnosis }}</p>
+    <p><strong>Prescribed Medicine:</strong> {{ follow_up.medicine }}</p>
+    <p><strong>Doctor:</strong> {{ doctor.name }}</p>
+    <p><strong>Date:</strong> {{ follow_up.date }}</p>
+</div>
+
+<a href="{% url 'doctor_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+
+
+{% endblock %}

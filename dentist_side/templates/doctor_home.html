@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background-color: #f0f2f5;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .button-container {
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            width: 350px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-link {
+            display: block;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome, Doctor</h1>
+
+    <div class="button-container">
+        <a href="{% url 'doctor_dashboard' %}" class="button-link">📊 Dashboard</a>
+        <a href="{% url 'patients_visited' %}" class="button-link">🧾 View Patients Attended</a>
+        <a href="{% url 'patients_records' %}" class="button-link">📋 View Patient Records</a>
+        <a href="{% url 'walkins' %}" class="button-link">🚶‍♂️ Add Walk-In Patients</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients Visited</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .patient-list {
+            margin: 0 auto;
+            max-width: 700px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .followup-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .followup-link:hover {
+            text-decoration: underline;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <h1>🩺 All Patients You've Attended</h1>
+
+    {% if patients %}
+        <div class="patient-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Phone</th>
+                        <th>Last Visit</th>
+                        <th>Follow-ups</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                        <tr>
+                            <td>{{ patient.name }}</td>
+                            <td>{{ patient.phone }}</td>
+                            <td>{{ patient.last_visit }}</td>
+                            <td>
+                                <a href="{% url 'patient_followups' patient.id %}" class="followup-link">
+                                    View Follow-ups
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No patients have visited you yet. 🧑‍⚕️</p>
+    {% endif %}
+
+    <!-- Back to home page button -->
+    <a href="{% url 'doctor_home' %}" class="back-button">⬅️ Back to Doctor Home</a>
+
+
+</body>
+</html>

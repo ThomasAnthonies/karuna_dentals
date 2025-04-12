@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Follow-up Records{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        margin: 0;
+        padding: 2em;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        background: white;
+        padding: 2em;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-btn {
+        display: inline-block;
+        margin-bottom: 1.5em;
+        padding: 0.6em 1.2em;
+        background-color: #555;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .back-btn:hover {
+        background-color: #333;
+    }
+
+    .card {
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 2em;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .card-header {
+        padding: 1em 1.5em;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .bg-primary {
+        background-color: #4285f4;
+        color: white;
+    }
+
+    .bg-success {
+        background-color: #34a853;
+        color: white;
+    }
+
+    .card-body {
+        padding: 1.5em;
+    }
+
+    .card-body p {
+        margin: 0.5em 0;
+        color: #444;
+        font-size: 0.95em;
+    }
+
+    ul.list-group {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .list-group-item {
+        padding: 1em 1.2em;
+        background: #f9f9f9;
+        margin-bottom: 1em;
+        border-radius: 6px;
+        border: 1px solid #e0e0e0;
+        transition: background 0.2s ease;
+    }
+
+    .list-group-item:hover {
+        background: #f1f1f1;
+    }
+
+    .text-muted {
+        color: #777;
+    }
+</style>
+
+<div class="container">
+    <a href="{% url 'patients_records' %}" class="back-btn">⬅️ Back to All Records</a>
+
+    <!-- Patient Info Card -->
+    <div class="card">
+        <div class="card-header bg-primary">Patient Details</div>
+        <div class="card-body">
+            <p><strong>Name:</strong> {{ patient.name }}</p>
+            <p><strong>Email:</strong> {{ patient.email }}</p>
+            <p><strong>Phone:</strong> {{ patient.phone }}</p>
+            <p><strong>Address:</strong> {{ patient.address }}</p>
+            <p><strong>Date of Birth:</strong> {{ patient.date_of_birth|date:"M d, Y" }}</p>
+        </div>
+    </div>
+
+    <!-- Follow-Up Info Card -->
+    <div class="card">
+        <div class="card-header bg-success">Follow-Up Records</div>
+        <div class="card-body">
+            {% if followups %}
+                <ul class="list-group">
+                    {% for follow in followups %}
+                        <li class="list-group-item">
+                            <p><strong>Date:</strong> {{ follow.date|date:"M d, Y" }}</p>
+                            <p><strong>Diagnosis:</strong> {{ follow.diagnosis }}</p>
+                            <p><strong>Medicine:</strong> {{ follow.medicine }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No follow-up records found for this patient.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+<!-- templates/form_for_new_patient_W_I.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register New Walk-In Patient</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f3;
+            padding: 2em;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 600px;
+            margin: auto;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5em;
+        }
+
+        form label {
+            display: block;
+            margin-top: 1em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 0.7em;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 0.3em;
+        }
+
+        button {
+            margin-top: 2em;
+            width: 100%;
+            background-color: #4caf50;
+            color: white;
+            padding: 0.8em;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>New Walk-In Patient Registration</h2>
+
+        {% if messages %}
+        <div class="message">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST"   action= "{% url 'create_new_form' %}">
+            {% csrf_token %}
+
+            <label for="name">Patient Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="walk_in_email">Email:</label>
+            <input type="email" id="walk_in_email" name="walk_in_email" value="{{ request.session.walk_in_email }}" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" value="{{ request.session.phone }}" required>
+
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" rows="3"></textarea>
+
+            <label for="date_of_birth">Date of Birth:</label>
+            <input type="date" id="date_of_birth" name="date_of_birth" required>
+
+            <button type="submit">Register Patient</button>
+        </form>
+    </div>
+</body>
+</html>

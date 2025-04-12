@@ -1,0 +1,51 @@
+<h2>Choose Date for {{ dentist.name }}</h2>
+<input type="date" id="date-picker">
+<div id="slots-container"></div>
+
+<script>
+  document.getElementById("date-picker").addEventListener("change", function() {
+    const selectedDate = this.value;
+    const dentistId = "{{ dentist.id }}";
+
+    fetch(`/appointments/get-slots/?date=${selectedDate}&dentist_id=${dentistId}`)
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("slots-container");
+        container.innerHTML = '';
+
+        data.available_slots.forEach(slot => {
+          const div = document.createElement("div");
+          div.className = "slot available";
+          div.textContent = `${slot.start_time} - ${slot.end_time}`;
+          container.appendChild(div);
+        });
+
+        data.unavailable_slots.forEach(slot => {
+          const div = document.createElement("div");
+          div.className = "slot unavailable";
+          div.textContent = `${slot.start_time} - ${slot.end_time}`;
+          container.appendChild(div);
+        });
+      });
+  });
+</script>
+
+<style>
+  .slot {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 200px;
+  }
+
+  .available {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .unavailable {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+</style>

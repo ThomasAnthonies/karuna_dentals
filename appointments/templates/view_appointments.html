@@ -21,7 +21,7 @@
                 <tr class="hover:bg-blue-50 transition">
                     <td class="px-4 py-2 border-b">{{ appointment.patient.name }}</td>
                     <td class="px-4 py-2 border-b">{{ appointment.date }}</td>
-                    <td class="px-4 py-2 border-b">{{ appointment.from_time }} - {{ appointment.to_time }}</td>
+                    <td class="px-4 py-2 border-b">{{ appointment.appointment_timming.start_time }} - {{ appointment.appointment_timming.end_time }}</td>
                     <td class="px-4 py-2 border-b">{{ appointment.appointed_doctor.name }}</td>
                     <td class="px-4 py-2 border-b">
                         {% if appointment.status == 'Confirmed' %}

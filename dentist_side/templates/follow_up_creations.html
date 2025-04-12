@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Follow-up Entry</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            padding: 2rem;
+        }
+
+        .container {
+            background: #fff;
+            padding: 2rem;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #343a40;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e9ecef;
+            font-weight: 600;
+        }
+
+        form label {
+            font-weight: 500;
+            margin-top: 1rem;
+            display: block;
+            color: #495057;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.8rem;
+            background-color: #0d6efd;
+            color: #fff;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0b5ed7;
+        }
+
+        hr {
+            margin: 2.5rem 0;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .no-records {
+            color: #6c757d;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Previous Follow-up Records</h2>
+
+        {% if follow %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Diagnosis</th>
+                    <th>Medicine</th>
+                    <th>Doctor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in follow %}
+                <tr>
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.diagnosis }}</td>
+                    <td>{{ record.medicine }}</td>
+                    <td>{{ record.doctdoctor_attended.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-records">No previous follow-ups found for this patient.</p>
+        {% endif %}
+
+        <hr>
+
+        <h2>Enter New Follow-up Details</h2>
+        <form method="POST" action="{% url 'walkin_follow_up' %}">
+            {% csrf_token %}
+            
+            <label for="diagnosis">Diagnosis</label>
+            <textarea id="diagnosis" name="diagnosis" rows="4" required placeholder="Enter patient's diagnosis here..."></textarea>
+
+            <label for="medicine">Medicine Prescribed</label>
+            <textarea id="medicine" name="medicine" rows="4" required placeholder="Enter prescribed medicines here..."></textarea>
+
+            <button type="submit">Submit Follow-Up</button>
+        </form>
+    </div>
+</body>
+</html>

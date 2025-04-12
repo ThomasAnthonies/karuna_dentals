@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book an Appointment - Karuna Dental</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0faff;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0077b6;
+            margin-top: 2em;
+        }
+
+        #dentist-buttons {
+            text-align: center;
+            margin: 2em auto;
+        }
+
+        .dentist-btn {
+            padding: 12px 25px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .dentist-btn:hover {
+            background-color: #45a049;
+        }
+
+        .dentist-btn.selected {
+            background-color: #2196F3;
+        }
+
+        #slot-section {
+            background-color: white;
+            max-width: 700px;
+            margin: 1.5em auto;
+            padding: 2em;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .slot {
+            padding: 10px 15px;
+            margin: 8px;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 0.95em;
+            min-width: 100px;
+        }
+
+        .unavailable {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .available {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .available:hover {
+            background-color: #388e3c;
+        }
+
+        footer {
+            background: linear-gradient(to right, #0077b6, #0096c7);
+            color: white;
+            text-align: center;
+            padding: 1em;
+            margin-top: 3em;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .dentist-btn {
+                display: block;
+                width: 80%;
+                margin: 10px auto;
+            }
+
+            #slot-section {
+                padding: 1.5em;
+            }
+
+            .slot {
+                min-width: auto;
+                display: block;
+                margin: 10px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>Select a Dentist on {{ request.session.date_ }}</h2>
+
+{% if dentist_on_duty %}
+    <div id="dentist-buttons">
+        {% for dentist in dentist_on_duty %}
+            <button class="dentist-btn" data-id="{{ dentist.id }}" id="dentist-{{ dentist.id }}">{{ dentist.name }}</button>
+        {% endfor %}
+    </div>
+{% else %}
+    <p style="text-align: center; color: #f44336;">No dentists available on this date.</p>
+{% endif %}
+
+<div id="slot-section">
+    <p>Please select a dentist to view available slots.</p>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.dentist-btn').click(function() {
+            const dentistId = $(this).data('id');
+
+            // Highlight selected dentist
+            $('.dentist-btn').removeClass('selected');
+            $(this).addClass('selected');
+
+            $.ajax({
+                url: '{% url "get_slots" %}',
+                data: {
+                    'dentist_id': dentistId
+                },
+                success: function(response) {
+                    $('#slot-section').html(response);
+                },
+                error: function(xhr) {
+                    $('#slot-section').html('<p style="color: red;">Error fetching slots. Please try again.</p>');
+                }
+            });
+        });
+    });
+</script>
+
+<footer>
+    <p>&copy; 2025 Karuna Dental Clinic. All rights reserved.</p>
+</footer>
+</body>
+</html>

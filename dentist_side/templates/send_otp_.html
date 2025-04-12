@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send OTP to Doctor Email</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .otp-container {
+            background-color: #ffffff;
+            padding: 30px 25px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2e86de;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1a5276;
+        }
+
+        .message {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .message.error {
+            color: red;
+        }
+
+        .message.success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="otp-container">
+        <h2>Send OTP to Email</h2>
+
+        {% if error %}
+            <p class="message error">{{ error }}</p>
+        {% endif %}
+        {% if success %}
+            <p class="message success">{{ success }}</p>
+        {% endif %}
+
+        <form method="POST" action="{% url 'send_otp_email' %}">
+            {% csrf_token %}
+            <label>Email:</label>
+            <input type="email" name="email" required>
+            <button type="submit">Send OTP</button>
+        </form>
+    </div>
+</body>
+</html>

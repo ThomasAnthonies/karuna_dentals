@@ -1,0 +1,19 @@
+<h3>Available Slots</h3>
+
+{% for slot in available_slots %}
+    <div class="slot available">
+        <a href="{% url 'book_the_slot' dentist_id=slot.dentist.id start_time=slot.start_time end_time=slot.end_time date=slot.date booked_appointments=slot.booked_appointments %}" style="color:white; text-decoration:none;">
+            {{ slot.start_time|time:"H:i" }} - {{ slot.end_time|time:"H:i" }} ({{ slot.available_slots }} left)
+        </a>
+    </div>
+{% empty %}
+    <p>No available slots.</p>
+{% endfor %}
+
+<h3>Unavailable Slots</h3>
+
+{% for slot in unavailable_slots %}
+    <div class="slot unavailable">
+        {{ slot.start_time|time:"H:i" }} - {{ slot.end_time|time:"H:i" }} (Full)
+    </div>
+{% endfor %}

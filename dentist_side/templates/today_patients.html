@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Today's Patients{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 2em;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        margin-top: 1.5em;
+        margin-bottom: 1em;
+        color: #333;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 0.3em;
+    }
+
+    .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em;
+        border-radius: 6px;
+    }
+
+    .followup-btn {
+        padding: 0.4em 1em;
+        font-size: 0.9em;
+        background-color: #007bff;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .followup-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="container">
+    <h2 class="section-title">Today's Appointments</h2>
+    <ul class="list-group mb-4">
+        {% for patient in patients_today %}
+            <li class="list-group-item">
+                <div>
+                    {{ patient.name }} - Phone: {{ patient.phone }} {{patient.address}} {{patient.date_of_birth}}
+                </div>
+                <a class="followup-btn" href="{% url 'put_the_patient_record' patient.id today%}">
+                    ➕ Add Follow-up
+                </a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-muted">No appointments today.</li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="section-title">Temporary Patients (You have not entered the details)</h2>
+    <ul class="list-group mb-4">
+        {% for patient in temporary_patients %}
+            <li class="list-group-item">
+                <div>
+                    {{ patient.name }} - Temporary ID: {{ patient.id }}
+                </div>
+                <a class="followup-btn" href="{% url 'put_the_patient_record' patient.id today_str doctor.id %}">
+                    ➕ Add Follow-up
+                </a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-muted">No walk-ins.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+        <a href="{% url 'doctor_home' %}" class="btn btn-outline-primary btn-lg">
+            ⬅️ Back to Doctor Home
+        </a>
+    </div>
+</div>
+{% endblock %}

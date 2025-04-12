@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% block title %}Register Walk-in Patient{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="mb-4">
+        <h2 class="text-primary">Register New Walk-in Patient</h2>
+        <hr>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post" action="{% url 'create_new_patient_walk_in' %}">
+                {% csrf_token %}
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter patient's full name" required>
+                </div>
+
+                <!-- Phone (if not stored in session) -->
+                {% if not request.session.phone %}
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone number" required>
+                </div>
+                {% endif %}
+
+                <!-- Email (if not stored in session) -->
+                {% if not request.session.walk_in_email %}
+                <div class="mb-3">
+                    <label for="walk_in_email" class="form-label">Email</label>
+                    <input type="email" name="walk_in_email" id="walk_in_email" class="form-control" placeholder="Enter email address" required>
+                </div>
+                {% endif %}
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea name="address" id="address" class="form-control" rows="2" placeholder="Enter patient's address"></textarea>
+                </div>
+
+                <!-- DOB -->
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" name="date_of_birth" id="dob" class="form-control">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-start">
+                    <button type="submit" class="btn btn-success">Register Patient</button>
+                    <a href="{% url 'doctor_home' %}" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Register Walk-in Patient{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="mb-4">
+        <h2 class="text-primary">Register New Walk-in Patient</h2>
+        <hr>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post" action="{% url 'create_new_patient_walk_in' %}">
+                {% csrf_token %}
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter patient's full name" required>
+                </div>
+
+                <!-- Phone (if not stored in session) -->
+                {% if not request.session.phone %}
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone number" required>
+                </div>
+                {% endif %}
+
+                <!-- Email (if not stored in session) -->
+                {% if not request.session.walk_in_email %}
+                <div class="mb-3">
+                    <label for="walk_in_email" class="form-label">Email</label>
+                    <input type="email" name="walk_in_email" id="walk_in_email" class="form-control" placeholder="Enter email address" required>
+                </div>
+                {% endif %}
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea name="address" id="address" class="form-control" rows="2" placeholder="Enter patient's address"></textarea>
+                </div>
+
+                <!-- DOB -->
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" name="date_of_birth" id="dob" class="form-control">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-start">
+                    <button type="submit" class="btn btn-success">Register Patient</button>
+                    <a href="{% url 'doctor_home' %}" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Register Walk-in Patient{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="mb-4">
+        <h2 class="text-primary">Register New Walk-in Patient</h2>
+        <hr>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post" action="{% url 'create_new_patient_walk_in' %}">
+                {% csrf_token %}
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter patient's full name" required>
+                </div>
+
+                <!-- Phone (if not stored in session) -->
+                {% if not request.session.phone %}
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone number" required>
+                </div>
+                {% endif %}
+
+                <!-- Email (if not stored in session) -->
+                {% if not request.session.walk_in_email %}
+                <div class="mb-3">
+                    <label for="walk_in_email" class="form-label">Email</label>
+                    <input type="email" name="walk_in_email" id="walk_in_email" class="form-control" placeholder="Enter email address" required>
+                </div>
+                {% endif %}
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea name="address" id="address" class="form-control" rows="2" placeholder="Enter patient's address"></textarea>
+                </div>
+
+                <!-- DOB -->
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" name="date_of_birth" id="dob" class="form-control">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-start">
+                    <button type="submit" class="btn btn-success">Register Patient</button>
+                    <a href="{% url 'doctor_home' %}" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Register Walk-in Patient{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="mb-4">
+        <h2 class="text-primary">Register New Walk-in Patient</h2>
+        <hr>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post" action="{% url 'create_new_patient_walk_in' %}">
+                {% csrf_token %}
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter patient's full name" required>
+                </div>
+
+                <!-- Phone (if not stored in session) -->
+                {% if not request.session.phone %}
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone number" required>
+                </div>
+                {% endif %}
+
+                <!-- Email (if not stored in session) -->
+                {% if not request.session.walk_in_email %}
+                <div class="mb-3">
+                    <label for="walk_in_email" class="form-label">Email</label>
+                    <input type="email" name="walk_in_email" id="walk_in_email" class="form-control" placeholder="Enter email address" required>
+                </div>
+                {% endif %}
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea name="address" id="address" class="form-control" rows="2" placeholder="Enter patient's address"></textarea>
+                </div>
+
+                <!-- DOB -->
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" name="date_of_birth" id="dob" class="form-control">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-start">
+                    <button type="submit" class="btn btn-success">Register Patient</button>
+                    <a href="{% url 'doctor_home' %}" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

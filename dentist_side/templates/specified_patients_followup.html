@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Follow-ups</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .followup-container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f1f1f1;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        input[type="text"], textarea {
+            padding: 10px;
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Follow-ups for {{ patient.name }}</h1>
+
+    <div class="followup-container">
+
+        <h3>📋 Previous Follow-ups</h3>
+        {% if patient_followups %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Diagnosis</th>
+                        <th>Medicine</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for followup in patient_followups %}
+                        <tr>
+                            <td>{{ followup.date }}</td>
+                            <td>{{ followup.diagnosis }}</td>
+                            <td>{{ followup.medicine }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No follow-ups found for this patient.</p>
+        {% endif %}
+
+        <h3>➕ Add New Follow-up</h3>
+        <form method="post" action="{% url 'add_followup' patient.id %}">
+            {% csrf_token %}
+            <input type="text" name="diagnosis" placeholder="Diagnosis" required>
+            <textarea name="medicine" placeholder="Prescribed Medicine" rows="3" required></textarea>
+            <button type="submit">Add Follow-up</button>
+        </form>
+
+        <div class="back-link">
+            <a href="{% url 'patients_visited' %}">← Back to All Patients</a>
+        </div>
+    </div>
+
+</body>
+</html>
