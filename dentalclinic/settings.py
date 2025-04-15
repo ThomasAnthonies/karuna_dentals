@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'appointments.apps.AppointmentsConfig',
     'availablity.apps.AvailablityConfig',
-    'dentist_side.apps.DentistSideConfig'
+    'dentist_side.apps.DentistSideConfig',
+    'django_cron'
 ]
 
 MIDDLEWARE = [
@@ -118,6 +119,10 @@ SESSION_COOKIE_HTTPONLY = True  # JS can't read it
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
+CRON_CLASSES = [
+    "appointments.cron.MoveAppointmentsCronJob",
+]
+
 
 LANGUAGE_CODE = 'en-us'
 
