@@ -626,6 +626,13 @@ def date_of_booking(request, slot_id,date,dentist_id):
     request.session['date'] = date  # Store the date in the session
     return render(request, 'available_slots.html', {'date': date})  # Redirect to available slots page
     
-    
+    # appointments/views.py
+from django.http import JsonResponse
+from appointments.tasks import move_appointments
+
+def trigger_task(request):
+    move_appointments.apply_async()  # Triggers the task asynchronously
+    return JsonResponse({"status": "Task triggered"})
+
     
     

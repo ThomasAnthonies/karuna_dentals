@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'appointments.apps.AppointmentsConfig',
     'availablity.apps.AvailablityConfig',
-    'dentist_side.apps.DentistSideConfig'
+    'dentist_side.apps.DentistSideConfig',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,16 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+#celery configurations for the projects that i have got 
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'redis'
+CELERY_TIMEZONE = 'UTC'
+
+
+
 
 
 # Static files (CSS, JavaScript, Images)
