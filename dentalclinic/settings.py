@@ -29,11 +29,10 @@ INSTALLED_APPS = [
     'appointments.apps.AppointmentsConfig',
     'availablity.apps.AvailablityConfig',
     'dentist_side.apps.DentistSideConfig',
-<<<<<<< HEAD
-    'django_cron'
-=======
+    'django_cron',
+
     'django_celery_beat',
->>>>>>> error_correction
+
 ]
 
 MIDDLEWARE = [
