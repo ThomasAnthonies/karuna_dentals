@@ -634,5 +634,8 @@ def trigger_task(request):
     move_appointments.apply_async()  # Triggers the task asynchronously
     return JsonResponse({"status": "Task triggered"})
 
+
+
+
     
     
