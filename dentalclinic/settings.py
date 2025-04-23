@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'appointments.apps.AppointmentsConfig',
     'availablity.apps.AvailablityConfig',
     'dentist_side.apps.DentistSideConfig',
-    'django_cron',
+    
 
     'django_celery_beat',
 
