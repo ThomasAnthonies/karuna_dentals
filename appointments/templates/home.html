@@ -487,6 +487,27 @@
     </style>
 </head>
 <body>
+    {% if messages %}
+<div class="container" style="margin-top: 20px;">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" style="
+        padding: 1em 1.5em;
+        border-radius: 10px;
+        margin-bottom: 1em;
+        color: #fff;
+        background-color: 
+            {% if 'success' in message.tags %}#38b000
+            {% elif 'error' in message.tags %}#d00000
+            {% elif 'warning' in message.tags %}#f48c06
+            {% else %}#0077b6{% endif %};
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    ">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 
 <header>
     <div class="header-content">

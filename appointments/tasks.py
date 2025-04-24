@@ -1,5 +1,5 @@
 from celery import shared_task
-from datetime import datetime
+from datetime import datetime, timedelta
 from .models import Appointment
 from dentist_side.models import Temporary_patient_location
 import logging
@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def move_appointments():
-    today = datetime.today().date()
+    today = datetime.today() - timedelta(days=1)
     appointments = Appointment.objects.filter(date=today)
     
     for appt in appointments:
@@ -21,6 +21,7 @@ def move_appointments():
                 phone=patient.phone,
                 address=patient.address,
                 date_of_birth=patient.date_of_birth,
+                dentist=appt.appointed_doctor
             )
 
             logger.info(f"Moved patient {patient.name} to temporary location.")

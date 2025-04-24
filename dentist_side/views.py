@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
-from datetime import date
+from datetime import date, datetime
 from django.core.mail import send_mail
 import random
 from django.db.models import Q, Max
-from django.db import IntegrityError
+from django.db import IntegrityError, DataError
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -23,64 +24,108 @@ from appointments.models import Dentist, Patient, Appointment, available_timming
 
 from django.views.decorators.http import require_http_methods
 
-def put_the_patient_record(request, patient_id, date):
+from django.views.decorators.csrf import csrf_exempt
 
-    # Step 1: Session validation
+
+@csrf_exempt
+def put_the_patient_record(request, patient_id, date):
+    # Step 1: Authentication check
     if not is_authenticated_doctor(request):
         messages.error(request, "Access denied. Please log in as a doctor to add follow-ups.")
         return redirect('doctor_login')
+
+    try:
+        doctor = Dentist.objects.get(id=request.session.get('dentist_id'))
+    except Dentist.DoesNotExist:
+        messages.error(request, "Doctor not found.")
+        return redirect('doctor_login')
+
+    # Step 2: Get patient from either model
+    try:
+        patient = Patient.objects.get(id=patient_id)
+    except Patient.DoesNotExist:
+        try:
+            patient = Temporary_patient_location.objects.get(id=patient_id)
+        except Temporary_patient_location.DoesNotExist:
+            messages.error(request, "No patient record found for this doctor on the selected date.")
+            return redirect('doctor_dashboard')
+
+    # Step 3: Handle POST
     if request.method == 'POST':
-    # Step 2: Validate doctor
+        print("POST request received")
+        # Create patient follow-up entry
         try:
-            doctor = Dentist.objects.get(id=request.session.get('dentist_id'))
-        except Dentist.DoesNotExist:
-            messages.error(request, "Doctor not found.")
-            return redirect('doctor_login')
-
-        # Step 3: Try to find patient in main or temp
-        patient = None
-
-        try:
-            patient = Patient.objects.get(id=patient_id)
-        
-        except Patient.DoesNotExist:
+            follow_patient = Patient_details.objects.create(
+                name=patient.name,
+                email=patient.email,
+                phone=patient.phone,
+                address=patient.address,
+                date_of_birth=patient.date_of_birth
+            )
+            print(follow_patient)
+        except IntegrityError as e: # here we have to do something like update the stuff 
             try:
-                patient = Temporary_patient_location.objects.get(id=patient_id)
-                
-            except Temporary_patient_location.DoesNotExist:
-                messages.error(request, "No patient record found for this doctor on the selected date.")
-                return redirect('doctor_dashboard')
-        follow_patient=Patient_details.objects.create(name=patient.name, email=patient.email,phone=patient.phone,address=patient.address,date_of_birth=patient.date_of_birth)
-        # Step 4: Get patient details (they must already exist if this function is called)
-    
-        if not is_authenticated_doctor(request):
-            messages.error(request, "Access denied. Please log in as a doctor to add follow-ups.")
-            return redirect('doctor_login')    
+                follow_patient=Patient_details.objects.get(email=patient.email)
+            except Patient_details.DoesNotExist :
+                messages.error(request, "some error occoured ")
+            print("IntegrityError: Could not create follow-up patient record due to a constraint violation.", e)
+        except DataError as e:
+            print("DataError: Invalid data provided for follow-up patient record.", e)
+            try:
+                follow_patient=Patient_details.objects.get(email=patient.email)
+            except Patient_details.DoesNotExist :
+                messages.error(request, "some error occoured ")
+        except ValidationError as e:
+            print("ValidationError: One or more fields failed validation.", e)
+            try:
+                follow_patient=Patient_details.objects.get(email=patient.email)
+            except Patient_details.DoesNotExist :
+                messages.error(request, "some error occoured ")
+        except Exception as e:
+            print("Unexpected error while creating follow-up patient record:", e)
+            try:
+                follow_patient=Patient_details.objects.get(email=patient.email)
+            except Patient_details.DoesNotExist :
+                messages.error(request, "some error occoured ")
         
         
-        # Step 5: Save follow-up
+        
+        
+        # Save follow-up record
         follow = Follow_up.objects.create(
             patient=follow_patient,
-            date=date,
+            date=datetime.strptime(date, "%Y-%m-%d").date(),
             doctor_attended=doctor,
             diagnosis=request.POST.get('diagnosis'),
             medicine=request.POST.get('medicine'),
         )
-        try :
-            Appointment.objects.get(patient=patient).delete()
-        except :
-            pass
-        try :
+        print (follow)
+
+        # Clean up original records
+        Appointment.objects.filter(patient=patient).delete()
+        try:
             patient.delete()
-        except (Patient.DoesNotExist, Temporary_patient_location.DoesNotExist):
-            messages.error(request, 'Cannot delete the patient')
+            print("the patient is deleted ")
+        except Exception:
+            messages.warning(request, 'Could not delete the patient record.')
+
         messages.success(request, "Follow-up recorded successfully.")
         return render(request, 'patients_visit.html', {
-            'patient': patient,
+            'patient': follow_patient,
             'follow_up': follow,
-            'doctor': doctor
+            'doctor': doctor,
+            
         })
-    return render(request, 'followup_creation_of_site_visited.html')
+
+    # Step 4: Handle GET
+    return render(request, 'followup_creation_of_site_visited.html', {
+        'patient': patient,
+        'doctor': doctor,
+        'date': date,
+    })
+
+
+
 
 def is_authenticated_doctor(request):
     return 'dentist_id' in request.session
@@ -140,14 +185,20 @@ def all_patients_visited(request):
 
     # Step 3: Restrict access to temporary patients (optional: show only those related to this doctor)
     # You might want to filter by doctor if there's a relationship
-    temporary_patients = Temporary_patient_location.objects.all()
-
+    try :
+        temporary_patients = Temporary_patient_location.objects.all()
+    except Exception :
+        messages.error(request,"you are upto-date")
+        temporary_patients = []
     context = {
-        'patients_today': patients_today,
-        'temporary_patients': temporary_patients,
-        'today' : today
-        
+    'appointments_today': appointments_today,
+    'patients_today': patients_today,
+    'temporary_patients': temporary_patients,
+    'today': today,
+    'today_str': today.strftime('%Y-%m-%d'),
+    'doctor': doctor,
     }
+
 
     return render(request, 'today_patients.html', context)
 
@@ -485,3 +536,80 @@ def patient_visit_repeat_followups(request, patient_id):
 def home_go(request):
     return render(request, 'doctor_home.html')
 
+def all_patients_from_past_and_future(request):
+    if request.method == 'POST':
+        selected_date_str = request.POST.get("date")
+        try:
+            selected_date = datetime.strptime(selected_date_str, "%Y-%m-%d").date()
+            appointments = Appointment.objects.filter(date=selected_date,appointed_doctor=get_logged_in_doctor(request)).order_by('appointment_timming__start_time')
+        except (ValueError, TypeError):
+            appointments = Appointment.objects.none()
+            messages.error(request, "Invalid date format provided.")
+    else:
+        appointments = Appointment.objects.filter(appointed_doctor=get_logged_in_doctor(request)).order_by('date', 'appointment_timming__start_time')
+
+    return render(request, "all_patients_from_past_and_future.html", {'appointments': appointments})
+
+
+
+def temporary_patients_followup(request, patient_id):
+    patient = get_object_or_404(Temporary_patient_location, id=patient_id)
+
+    if request.method == 'POST':
+        try:
+            doctor = get_logged_in_doctor(request)
+            if not doctor:
+                messages.error(request, "Doctor session expired. Please log in again.")
+                return redirect('doctor_login')
+
+            # Check for existing patient by email or phone
+            existing_patient = Patient_details.objects.filter(
+                Q(email=patient.email) | Q(phone=patient.phone)
+            ).first()
+
+            if existing_patient:
+                new_patient = existing_patient
+            else:
+                # Create a new permanent patient record
+                new_patient = Patient_details.objects.create(
+                    name=patient.name,
+                    email=patient.email,
+                    phone=patient.phone,
+                    address=patient.address,
+                    date_of_birth=patient.date_of_birth
+                )
+
+            # Create the follow-up record
+            Follow_up.objects.create(
+                patient=new_patient,
+                doctor_attended=doctor,
+                diagnosis=request.POST.get('diagnosis', ''),
+                medicine=request.POST.get('medicine', '')
+            )
+
+            # Clean up temporary record
+            patient.delete()
+
+            messages.success(request, "Follow-up saved. Patient successfully recorded.")
+            return redirect('patients_records')
+
+        except IntegrityError as e:
+            messages.error(request, f"Integrity error: {str(e)}")
+            return redirect('doctor_dashboard')
+        except Exception as e:
+            messages.error(request, f"Unexpected error: {str(e)}")
+            return redirect('doctor_dashboard')
+
+    else:
+        # GET request: Show the follow-up form along with existing history
+        # Try to find existing patient details if they exist
+        existing_patient = Patient_details.objects.filter(
+            Q(email=patient.email) | Q(phone=patient.phone)
+        ).first()
+
+        followups = Follow_up.objects.filter(patient=existing_patient).order_by('-date') if existing_patient else []
+
+        return render(request, 'followup_form.html', {
+            'patient': patient,
+            'followups': followups
+        })

@@ -42,7 +42,8 @@ class Temporary_patient_location(models.Model):
     phone = models.CharField(max_length=15, unique=True)
     address = models.TextField()
     date_of_birth = models.DateField()
-
+    dentist= models.ForeignKey(Dentist, on_delete=models.CASCADE)
+    
     def __str__(self):
         return self.name
 

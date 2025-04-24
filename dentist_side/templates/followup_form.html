@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4 text-center text-primary fw-bold">🩺 Add Follow-Up for {{ patient.name }}</h2>
+
+    <!-- Patient Details -->
+    <div class="card shadow border-primary mb-4">
+        <div class="card-header bg-primary text-white fw-semibold">
+            👤 Patient Information
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm">
+                <tbody>
+                    <tr>
+                        <th>Name</th><td>{{ patient.name }}</td>
+                        <th>Email</th><td>{{ patient.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th><td>{{ patient.phone }}</td>
+                        <th>Address</th><td>{{ patient.address }}</td>
+                    </tr>
+                    <tr>
+                        <th>DOB</th><td colspan="3">{{ patient.date_of_birth }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Previous Follow-Ups -->
+    {% if followups %}
+    <div class="card shadow border-info mb-4">
+        <div class="card-header bg-info text-white fw-semibold">
+            📋 Previous Follow-Ups
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Date</th>
+                        <th>Diagnosis</th>
+                        <th>Medicine</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for followup in followups %}
+                    <tr>
+                        <td>{{ followup.date }}</td>
+                        <td>{{ followup.diagnosis }}</td>
+                        <td>{{ followup.medicine }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center">
+        🚫 No previous follow-ups found.
+    </div>
+    {% endif %}
+
+    <!-- Follow-Up Form -->
+    <div class="card shadow border-success">
+        <div class="card-header bg-success text-white fw-semibold">
+            ➕ New Follow-Up Form
+        </div>
+        <div class="card-body">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="diagnosis" class="form-label fw-semibold">Diagnosis</label>
+                    <input type="text" class="form-control form-control-lg border-primary shadow-sm" 
+                           id="diagnosis" name="diagnosis" placeholder="e.g., Wisdom tooth inflammation" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="medicine" class="form-label fw-semibold">Prescribed Medicine</label>
+                    <input type="text" class="form-control form-control-lg border-primary shadow-sm"
+                           id="medicine" name="medicine" placeholder="e.g., Amoxicillin 500mg 3x/day" required>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-lg btn-primary shadow-sm px-4 py-2">
+                        💾 Submit Follow-Up
+                    </button>
+                    <a href="{% url 'doctor_dashboard' %}" class="btn btn-lg btn-outline-secondary px-4 py-2">
+                        ⬅️ Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -29,5 +29,7 @@ urlpatterns = [
     path('patients/', views.all_patients_visited_from_start, name='patients_visited'),
     path('patients/<int:patient_id>/followups/', views.all_patients_visited_s_selected_patients_followups, name='patient_followups'),
     path('patients/<int:patient_id>/add_followup/', views.patient_visit_repeat_followups, name='add_followup'),
+    path('appointments/all/', views.all_patients_from_past_and_future, name='all_appointments'),
+    path('temporary-patient/followup/<int:patient_id>/', views.temporary_patients_followup, name='put_the_temporary_patient_record'),
 
 ]

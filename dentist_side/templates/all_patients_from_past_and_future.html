@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Appointments</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f6fc;
+            color: #1a1a2e;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0a3d62;
+            margin-bottom: 30px;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-right: 10px;
+            color: #0a3d62;
+        }
+
+        input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid #4682b4;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #eaf4fb;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #2c80b4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e1e9f0;
+        }
+
+        th {
+            background-color: #d0e7ff;
+            color: #0a3d62;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Appointments (Past and Future)</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="date">Filter by date:</label>
+        <input type="date" name="date" required>
+        <button type="submit">Filter</button>
+    </form>
+
+    {% if appointments %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in appointments %}
+                <tr>
+                    <td>{{ appt.patient.name }}</td>
+                    <td>{{ appt.appointed_doctor.name }}</td>
+                    <td>{{ appt.date }}</td>
+                    <td>{{ appt.appointment_timming.start_time }} - {{ appt.appointment_timming.end_time }}</td>
+                    <td>{{ appt.status }}</td>
+                    <td>{{ appt.notes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No appointments found.</p>
+    {% endif %}
+</body>
+</html>

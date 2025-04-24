@@ -122,6 +122,7 @@ from django.db.utils import OperationalError
 from datetime import datetime
 from django.utils import timezone
 from appointments.models import Blacklist
+from dentist_side.models import Temporary_patient_location
 
 
 
@@ -146,11 +147,32 @@ def book_slot(request):
     if request.method == 'POST':
         # Validate slot
         
+####### new code for the checking wether it is old 
+        try :
+            patient=Patient.objects.filter(email=request.session.get('otp_email')).get()
+            print (patient)
+            
+            appointment=Appointment.objects.filter(patient=patient).get()
+            print(appointment)
 
-        # Check if email already exists
-        if Patient.objects.filter(email=request.session.get('otp_email')).exists():
-            return HttpResponse("Patient with the same email already exists.", status=400)
-
+            if patient and appointment.date < now().date() :
+                print("passed the if ")
+                temp=Temporary_patient_location.objects.create(name=patient.name, email=patient.email, address= patient.address, date_of_birth=patient.date_of_birth, dentist=appointment.appointed_doctor)
+                print(temp)
+                patient.delete()
+                print("deleted the patient ")
+                appointment.delete()
+                print("deleted the appointment ")
+            elif patient :
+                messages.error(request, "Patient with the same email already exists.")
+                return redirect('home')
+                # Check if email already exists
+ ####### until this one                
+        except Patient.DoesNotExist:
+            pass
+        except Appointment.DoesNotExist:
+            pass
+        
         # Validate required form fields
         required_fields = ['name', 'phone', 'date_of_birth']
         if not all(request.POST.get(field) for field in required_fields):

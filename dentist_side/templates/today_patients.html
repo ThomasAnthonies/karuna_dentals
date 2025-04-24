@@ -7,77 +7,122 @@
         max-width: 900px;
         margin: auto;
         padding: 2em;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        background: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
     }
 
     .section-title {
         margin-top: 1.5em;
         margin-bottom: 1em;
-        color: #333;
-        border-bottom: 2px solid #007bff;
+        color: #0d6efd;
+        border-bottom: 2px solid #0d6efd;
         padding-bottom: 0.3em;
+        font-weight: bold;
     }
 
     .list-group-item {
+        background-color: white;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        padding: 1rem 1.2rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1em;
-        border-radius: 6px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.03);
+    }
+
+    .patient-info {
+        display: flex;
+        flex-direction: column;
+        font-size: 0.95rem;
+    }
+
+    .patient-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #343a40;
+    }
+
+    .patient-meta {
+        color: #6c757d;
+        margin-top: 0.3rem;
+        line-height: 1.4;
     }
 
     .followup-btn {
-        padding: 0.4em 1em;
+        padding: 0.5em 1.2em;
         font-size: 0.9em;
-        background-color: #007bff;
+        background-color: #0d6efd;
         border: none;
         color: white;
-        border-radius: 4px;
+        border-radius: 6px;
         text-decoration: none;
+        transition: background-color 0.2s ease;
     }
 
     .followup-btn:hover {
-        background-color: #0056b3;
+        background-color: #0a58ca;
+    }
+
+    .btn-back {
+        margin-top: 2rem;
     }
 </style>
 
 <div class="container">
-    <h2 class="section-title">Today's Appointments</h2>
-    <ul class="list-group mb-4">
-        {% for patient in patients_today %}
+    <h2 class="section-title">📅 Today's Appointments</h2>
+    {% if patients_today %}
+        <ul class="list-group mb-4">
+            {% for appt in appointments_today %}
+<li class="list-group-item">
+    <div class="patient-info">
+        <span class="patient-name">👤 {{ appt.patient.name }}</span>
+        <span class="patient-meta">
+            📞 {{ appt.patient.phone }}<br>
+            🏠 {{ appt.patient.address }}<br>
+            📧 {{ appt.patient.email }}<br>
+            🎂 {{ appt.patient.date_of_birth }}<br>
+            ⏰ Consultation: {{ appt.appointment_timming.start_time|time:"H:i" }} - {{ appt.appointment_timming.end_time|time:"H:i" }}
+        </span>
+    </div>
+    <a class="followup-btn" href="{% url 'put_the_patient_record' appt.patient.id today %}">
+        ➕ Add Follow-up
+    </a>
+</li>
+{% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-warning text-center">🚫 No appointments today.</div>
+    {% endif %}
+
+    <h2 class="section-title">🚶 Walk-In Patients</h2>
+    {% if temporary_patients %}
+        <ul class="list-group mb-4">
+            {% for patient in temporary_patients %}
             <li class="list-group-item">
-                <div>
-                    {{ patient.name }} - Phone: {{ patient.phone }} {{patient.address}} {{patient.date_of_birth}}
+                <div class="patient-info">
+                    <span class="patient-name">🧾 {{ patient.name }}</span>
+                    <span class="patient-meta">
+                        📞 {{ patient.phone }}<br>
+                        🏠 {{ patient.address }}<br>
+                        📧 {{ patient.email }}<br>
+                        🎂 {{ patient.date_of_birth }}<br>
+                        Temporary ID: {{ patient.id }}
+                    </span>
                 </div>
-                <a class="followup-btn" href="{% url 'put_the_patient_record' patient.id today%}">
+                <a class="followup-btn" href="{% url 'put_the_temporary_patient_record' patient.id %}">
                     ➕ Add Follow-up
                 </a>
             </li>
-        {% empty %}
-            <li class="list-group-item text-muted">No appointments today.</li>
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-secondary text-center">No walk-in patients.</div>
+    {% endif %}
 
-    <h2 class="section-title">Temporary Patients (You have not entered the details)</h2>
-    <ul class="list-group mb-4">
-        {% for patient in temporary_patients %}
-            <li class="list-group-item">
-                <div>
-                    {{ patient.name }} - Temporary ID: {{ patient.id }}
-                </div>
-                <a class="followup-btn" href="{% url 'put_the_patient_record' patient.id today_str doctor.id %}">
-                    ➕ Add Follow-up
-                </a>
-            </li>
-        {% empty %}
-            <li class="list-group-item text-muted">No walk-ins.</li>
-        {% endfor %}
-    </ul>
-
-    <!-- Back Button -->
-    <div class="text-center mt-4">
+    <div class="text-center btn-back">
         <a href="{% url 'doctor_home' %}" class="btn btn-outline-primary btn-lg">
             ⬅️ Back to Doctor Home
         </a>
